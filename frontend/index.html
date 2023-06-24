@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do</title>
+  </head>
+  <script>
+    function toDoList() {
+      fetch("http://localhost:3000/todos", {
+        Method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          document.getElementById("content").innerHTML = JSON.stringify(data);
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        });
+    }
+    toDoList();
+  </script>
+  <script>
+    function parsedResponse(data) {
+      console.log(data);
+    }
+    function callback(res) {
+      res.json().then(parsedResponse);
+    }
+    function onPress() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+      fetch("http://localhost:3000/todos", {
+        method: "POST",
+        body: JSON.stringify({
+          title: title,
+          description: description,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(callback);
+    }
+  </script>
+
+  <body>
+    Todo Title
+    <input type="text" id="title" value="" />
+    Todo Description
+    <input type="text" id="description" value="" />
+    <button onclick="onPress()">Send❤️</button>
+    <div>
+      <h1>Data from todos.json file</h1>
+      <p id="content"></p>
+    </div>
+  </body>
+</html>
