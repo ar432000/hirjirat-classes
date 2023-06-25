@@ -6,6 +6,20 @@
     <title>To Do</title>
   </head>
   <script>
+    function deleteDone() {
+      console.log("done delete");
+      // Delete the right todo from the list
+      // You will need to give each todo an id, and that should be enough to remove it
+    }
+    function deleteTodo(id) {
+      fetch("http://localhost:3000/todos/" + id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(deleteDone);
+    }
+
     function toDoList() {
       fetch("http://localhost:3000/todos", {
         Method: "GET",
@@ -16,7 +30,53 @@
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          document.getElementById("content").innerHTML = JSON.stringify(data);
+          // document.getElementById("content").innerHTML = JSON.stringify(data);
+          var parentElement = document.getElementById("content");
+          // parentElement.innerHTML = JSON.stringify(data);
+          for (var i = 0; i < data.length; i++) {
+            var childElement = document.createElement("div");
+
+            var grandChildElement1 = document.createElement("span");
+            grandChildElement1.innerHTML = data[i].title;
+
+            var grandChildElement2 = document.createElement("span");
+            grandChildElement2.innerHTML = data[i].description;
+
+            var grandChildElement3 = document.createElement("button");
+            grandChildElement3.innerHTML = "Delete";
+
+            var parentElement = document.getElementById("content");
+            // parentElement.innerHTML = JSON.stringify(data);
+            for (var i = 0; i < data.length; i++) {
+              var childElement = document.createElement("div");
+
+              var grandChildElement1 = document.createElement("span");
+              grandChildElement1.innerHTML = data[i].title;
+
+              var grandChildElement2 = document.createElement("span");
+              grandChildElement2.innerHTML = data[i].description;
+
+              var grandChildElement3 = document.createElement("button");
+              grandChildElement3.innerHTML = "Delete";
+
+              grandChildElement3.setAttribute(
+                "onclick",
+                "deleteTodo(" + data[i].id + ")"
+              );
+
+              childElement.appendChild(grandChildElement1);
+              childElement.appendChild(grandChildElement2);
+              childElement.appendChild(grandChildElement3);
+
+              parentElement.appendChild(childElement);
+            }
+
+            childElement.appendChild(grandChildElement1);
+            childElement.appendChild(grandChildElement2);
+            childElement.appendChild(grandChildElement3);
+
+            parentElement.appendChild(childElement);
+          }
         })
         .catch((error) => {
           console.log("Error", error);
@@ -55,7 +115,7 @@
     <button onclick="onPress()">Send❤️</button>
     <div>
       <h1>Data from todos.json file</h1>
-      <p id="content"></p>
+      <div id="content"></div>
     </div>
   </body>
 </html>
